@@ -49,6 +49,7 @@ let totalTime;
 let time;
 let timer;
 let isRunning = false;
+let currentWeekOffset = 0; // 주간 네비게이션용
 const FULL_DASH_ARRAY = 2 * Math.PI * 80;
 
 // 세션 초기화
@@ -93,11 +94,24 @@ function saveHistory(history) {
   localStorage.setItem('pomodoroHistory', JSON.stringify(history));
 }
 
-function getThisMonday(date) {
+function getMonday(date, weekOffset = 0) {
   const d = new Date(date);
+  d.setDate(d.getDate() + (weekOffset * 7));
   const day = d.getDay();
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   return new Date(d.setDate(diff));
+}
+
+// 주 표시 텍스트
+function getWeekDisplayText() {
+  if (currentWeekOffset === 0) return 'This Week';
+  if (currentWeekOffset === -1) return 'Last Week';
+  if (currentWeekOffset === 1) return 'Next Week';
+  
+  const monday = getMonday(new Date(), currentWeekOffset);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  return `${monday.getMonth()+1}/${monday.getDate()} - ${sunday.getMonth()+1}/${sunday.getDate()}`;
 }
 
 // 수정된 차트 그리기 함수
@@ -105,14 +119,25 @@ function drawChart() {
   const history = loadHistory();
   const chart = document.querySelector('.chart');
   const labelsDiv = document.querySelector('.chart-labels');
+  const weekDisplay = document.querySelector('.chart-header span');
+  const prevBtn = document.querySelector('.nav-btn:first-child');
+  const nextBtn = document.querySelector('.nav-btn:last-child');
   
+  // 차트와 라벨 초기화
   chart.innerHTML = '';
   labelsDiv.innerHTML = '';
   
   const today = new Date();
-  const monday = getThisMonday(today);
+  const monday = getMonday(today, currentWeekOffset);
   
-  // 최대값 설정: 최소 5로 설정하여 1회가 너무 높게 표시되지 않도록 함
+  // 주 표시 업데이트
+  weekDisplay.textContent = getWeekDisplayText();
+  
+  // 버튼 활성화/비활성화
+  nextBtn.disabled = currentWeekOffset >= 1;
+  prevBtn.disabled = currentWeekOffset <= -4; // 4주 전까지만
+  
+  // 최대값 설정: 최소 5로 설정
   let maxCount = 5;
   const weekData = [];
   
@@ -132,17 +157,38 @@ function drawChart() {
   }
   
   weekData.forEach(data => {
-    // 막대를 감싸는 컨테이너 생성
+    // 막대를 감싸는 wrapper
+    const barWrapper = document.createElement('div');
+    barWrapper.style.flex = '1';
+    barWrapper.style.display = 'flex';
+    barWrapper.style.flexDirection = 'column';
+    barWrapper.style.alignItems = 'center';
+    barWrapper.style.gap = '4px';
+    barWrapper.style.height = '100%';
+    barWrapper.style.justifyContent = 'flex-end';
+    
+    // 세션 수 표시
+    const barValue = document.createElement('div');
+    barValue.style.fontSize = '0.7rem';
+    barValue.style.color = '#666';
+    barValue.style.fontWeight = '500';
+    barValue.style.minHeight = '16px';
+    if (data.count > 0) {
+      barValue.textContent = data.count;
+    }
+    barWrapper.appendChild(barValue);
+    
+    // 막대 컨테이너
     const barContainer = document.createElement('div');
     barContainer.style.flex = '1';
+    barContainer.style.width = '100%';
     barContainer.style.display = 'flex';
     barContainer.style.justifyContent = 'center';
     barContainer.style.alignItems = 'flex-end';
-    barContainer.style.height = '100%';
     
     const barDiv = document.createElement('div');
     barDiv.className = 'bar';
-    const barHeight = data.count > 0 ? Math.max((data.count / maxCount) * 100, 10) : 0; // 최소 높이 10%
+    const barHeight = data.count > 0 ? Math.max((data.count / maxCount) * 100, 10) : 0;
     barDiv.style.height = `${barHeight}%`;
     barDiv.style.width = '18px';
     
@@ -154,10 +200,11 @@ function drawChart() {
     
     barDiv.title = `${data.date}: ${data.count} sessions`;
     barContainer.appendChild(barDiv);
-    chart.appendChild(barContainer);
+    barWrapper.appendChild(barContainer);
+    chart.appendChild(barWrapper);
   });
   
-  // 라벨도 균등하게 배치
+  // 라벨
   weekData.forEach(data => {
     const labelContainer = document.createElement('div');
     labelContainer.style.flex = '1';
@@ -258,6 +305,31 @@ skipBtn.onclick = function() {
   }
 };
 
+// ===== 주간 네비게이션 =====
+document.addEventListener('DOMContentLoaded', function() {
+  // 주간 네비게이션 버튼 이벤트
+  const prevBtn = document.querySelector('.nav-btn:first-child');
+  const nextBtn = document.querySelector('.nav-btn:last-child');
+  
+  if (prevBtn) {
+    prevBtn.onclick = function() {
+      if (!this.disabled) {
+        currentWeekOffset--;
+        drawChart();
+      }
+    };
+  }
+  
+  if (nextBtn) {
+    nextBtn.onclick = function() {
+      if (!this.disabled) {
+        currentWeekOffset++;
+        drawChart();
+      }
+    };
+  }
+});
+
 // ===== 설정 모달 =====
 settingsBtn.onclick = function() {
   settingsModal.classList.add('show');
@@ -277,6 +349,7 @@ saveBtn.onclick = function() {
   
   if (settings.showChart) {
     chartBox.classList.add('active');
+    currentWeekOffset = 0; // 차트 표시할 때 현재 주로 초기화
     drawChart();
   } else {
     chartBox.classList.remove('active');
