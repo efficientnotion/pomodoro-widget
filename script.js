@@ -1,3 +1,8 @@
+// ⭐ 페이지별 독립 저장소 설정 (맨 위에 추가)
+const PAGE_ID = btoa(window.location.href);
+const SETTINGS_KEY = 'pomodoroSettings_' + PAGE_ID;
+const HISTORY_KEY = 'pomodoroHistory_' + PAGE_ID;
+
 // ===== DOM 요소 선택 =====
 const timerDisplay = document.querySelector('.timer');
 const statusDisplay = document.querySelector('.status');
@@ -20,9 +25,9 @@ let settings = {
   showChart: false
 };
 
-// 설정 불러오기
+// 설정 불러오기 - ⭐ 수정됨
 function loadSettings() {
-  const saved = localStorage.getItem('pomodoroSettings');
+  const saved = localStorage.getItem(SETTINGS_KEY);
   if (saved) {
     settings = JSON.parse(saved);
     document.getElementById('workTime').value = settings.work;
@@ -86,12 +91,14 @@ function getDateStr(date) {
   return date.toISOString().slice(0, 10);
 }
 
+// loadHistory 함수 - ⭐ 수정됨
 function loadHistory() {
-  return JSON.parse(localStorage.getItem('pomodoroHistory') || '{}');
+  return JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}');
 }
 
+// saveHistory 함수 - ⭐ 수정됨
 function saveHistory(history) {
-  localStorage.setItem('pomodoroHistory', JSON.stringify(history));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 }
 
 function getMonday(date, weekOffset = 0) {
@@ -339,13 +346,14 @@ closeBtn.onclick = function() {
   settingsModal.classList.remove('show');
 };
 
+// saveBtn.onclick 함수 - ⭐ 수정됨
 saveBtn.onclick = function() {
   settings.work = parseInt(document.getElementById('workTime').value);
   settings.shortBreak = parseInt(document.getElementById('shortBreak').value);
   settings.longBreak = parseInt(document.getElementById('longBreak').value);
   settings.showChart = document.getElementById('showChart').checked;
   
-  localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); // ⭐ 수정됨
   
   if (settings.showChart) {
     chartBox.classList.add('active');
