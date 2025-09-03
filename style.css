@@ -102,6 +102,7 @@ body {
   color: #f59e0b;
 }
 
+/* 기존 controls 스타일 유지 */
 .controls {
   margin-top: 10px;
   display: flex;
@@ -117,11 +118,20 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .controls button:hover {
   background: #f9f9f9;
   border-color: #16b8f3;
 }
+
+/* 스킵 버튼 아이콘 위치 조정 */
+#skip {
+  padding-bottom: 3px; /* 아이콘을 약간 위로 올림 */
+}
+
 
 /* 차트 박스 */
 .chart-box {
