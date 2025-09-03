@@ -9,8 +9,8 @@
   <div class="container">
     <!-- 타이머 (좌측) -->
     <div class="timer-box">
-      <!-- 설정 버튼을 타이머 박스 안으로 이동 -->
-      <button id="toggleChart" class="settings-btn">&#9881;</button>
+      <!-- 설정 버튼 -->
+      <button id="settingsBtn" class="settings-btn">&#9881;</button>
 
       <div class="circle">
         <svg width="180" height="180">
@@ -23,30 +23,81 @@
           />
         </svg>
         <span class="timer">25:00</span>
-        <div class="status">● work</div>
+        <div class="status">● Work</div>
       </div>
       <div class="controls">
         <button id="start">&#9658;</button>
         <button id="reset">&#8635;</button>
+        <button id="skip">&#9193;</button>
       </div>
     </div>
 
     <!-- 차트 (우측) -->
     <div class="chart-box">
       <div class="chart-header">
-        <!-- 주 이동 버튼은 지금 기능이 없으므로 일단 비활성화 처리 -->
         <button class="nav-btn" disabled>&#8592;</button>
         <span>Weekly Stats</span>
         <button class="nav-btn" disabled>&#8594;</button>
       </div>
       <div class="chart">
-        <!-- 자바스크립트가 이 안을 채워줍니다. -->
       </div>
       <div class="chart-labels">
-        <!-- 자바스크립트가 이 안을 채워줍니다. -->
       </div>
     </div>
   </div>
+
+  <!-- 설정 모달 -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Settings</h3>
+        <button class="close-btn">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="settings-section">
+          <h4>Timer Duration</h4>
+          
+          <div class="setting-item">
+            <label for="workTime">Work</label>
+            <div class="input-group">
+              <input type="number" id="workTime" min="1" max="60" value="25">
+              <span>minutes</span>
+            </div>
+          </div>
+          
+          <div class="setting-item">
+            <label for="shortBreak">Short Break</label>
+            <div class="input-group">
+              <input type="number" id="shortBreak" min="1" max="30" value="5">
+              <span>minutes</span>
+            </div>
+          </div>
+          
+          <div class="setting-item">
+            <label for="longBreak">Long Break</label>
+            <div class="input-group">
+              <input type="number" id="longBreak" min="1" max="60" value="15">
+              <span>minutes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h4>Display Options</h4>
+          <div class="setting-item">
+            <label for="showChart">Show Weekly Stats</label>
+            <input type="checkbox" id="showChart" class="toggle-switch">
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button id="saveSettings" class="save-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
