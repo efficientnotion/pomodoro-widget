@@ -109,5 +109,14 @@ resetBtn.onclick = function() {
   startBtn.innerHTML = '▶';
 };
 
+const toggleChartBtn = document.getElementById('toggleChart');
+const chartBox = document.querySelector('.chart-box');
+
+toggleChartBtn.onclick = function() {
+  chartBox.classList.toggle('active');
+};
+
+
 // ===== 페이지 시작 시 차트 처음 한 번 그리기 =====
 drawChart();
+
