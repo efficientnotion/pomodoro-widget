@@ -26,16 +26,25 @@ body {
 }
 
 .circle {
+  position: relative;
   width: 180px;
   height: 180px;
-  border-radius: 50%;
-  background: #f9f9f9;
-  box-shadow: 0 2px 8px #eee inset;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 16px;
 }
+.circle svg {
+  position: absolute;
+  top: 0; left: 0;
+}
+.circle .timer,
+.circle .status {
+  position: relative;
+  z-index: 2;
+}
+
 
 .timer {
   font-size: 2.2rem;
