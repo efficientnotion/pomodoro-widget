@@ -9,55 +9,41 @@
   <div class="container">
     <!-- 타이머 (좌측) -->
     <div class="timer-box">
-      <div class="circle">
-  <svg width="180" height="180">
-    <circle
-      class="bg"
-      cx="90" cy="90" r="80"
-      stroke="#e5e5e5"
-      stroke-width="14"
-      fill="none"
-    />
-    <circle
-      class="progress"
-      cx="90" cy="90" r="80"
-      stroke="#16b8f3"
-      stroke-width="14"
-      fill="none"
-      stroke-linecap="round"
-      stroke-dasharray="502"
-      stroke-dashoffset="0"
-    />
-  </svg>
-  <span class="timer">25:00</span>
-  <div class="status">● work</div>
-</div>
+      <!-- 설정 버튼을 타이머 박스 안으로 이동 -->
+      <button id="toggleChart" class="settings-btn">&#9881;</button>
 
+      <div class="circle">
+        <svg width="180" height="180">
+          <circle class="bg" cx="90" cy="90" r="80"/>
+          <circle
+            class="progress"
+            cx="90" cy="90" r="80"
+            stroke-dasharray="502.6"
+            stroke-dashoffset="502.6"
+          />
+        </svg>
+        <span class="timer">25:00</span>
+        <div class="status">● work</div>
+      </div>
       <div class="controls">
         <button id="start">&#9658;</button>
         <button id="reset">&#8635;</button>
       </div>
     </div>
+
     <!-- 차트 (우측) -->
-    <!-- chart-box 바로 위에 추가 -->
-<button id="toggleChart" class="settings-btn">&#9776;</button>
     <div class="chart-box">
       <div class="chart-header">
-        <button class="nav-btn">&#8592;</button>
-        <span>September 2025</span>
-        <button class="nav-btn">&#8594;</button>
+        <!-- 주 이동 버튼은 지금 기능이 없으므로 일단 비활성화 처리 -->
+        <button class="nav-btn" disabled>&#8592;</button>
+        <span>Weekly Stats</span>
+        <button class="nav-btn" disabled>&#8594;</button>
       </div>
       <div class="chart">
-        <div class="bar" style="height: 80%"></div>
-        <div class="bar" style="height: 80%"></div>
-        <div class="bar" style="height: 35%"></div>
-        <div class="bar" style="height: 80%"></div>
-        <div class="bar" style="height: 100%"></div>
-        <div class="bar" style="height: 80%"></div>
-        <div class="bar" style="height: 80%"></div>
+        <!-- 자바스크립트가 이 안을 채워줍니다. -->
       </div>
       <div class="chart-labels">
-        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+        <!-- 자바스크립트가 이 안을 채워줍니다. -->
       </div>
     </div>
   </div>
