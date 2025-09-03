@@ -100,6 +100,7 @@ function getThisMonday(date) {
   return new Date(d.setDate(diff));
 }
 
+// 수정된 차트 그리기 함수
 function drawChart() {
   const history = loadHistory();
   const chart = document.querySelector('.chart');
@@ -111,7 +112,8 @@ function drawChart() {
   const today = new Date();
   const monday = getThisMonday(today);
   
-  let maxCount = 1;
+  // 최대값 설정: 최소 5로 설정하여 1회가 너무 높게 표시되지 않도록 함
+  let maxCount = 5;
   const weekData = [];
   
   for (let i = 0; i < 7; i++) {
@@ -130,9 +132,19 @@ function drawChart() {
   }
   
   weekData.forEach(data => {
+    // 막대를 감싸는 컨테이너 생성
+    const barContainer = document.createElement('div');
+    barContainer.style.flex = '1';
+    barContainer.style.display = 'flex';
+    barContainer.style.justifyContent = 'center';
+    barContainer.style.alignItems = 'flex-end';
+    barContainer.style.height = '100%';
+    
     const barDiv = document.createElement('div');
     barDiv.className = 'bar';
-    barDiv.style.height = `${(data.count / maxCount) * 100}%`;
+    const barHeight = data.count > 0 ? Math.max((data.count / maxCount) * 100, 10) : 0; // 최소 높이 10%
+    barDiv.style.height = `${barHeight}%`;
+    barDiv.style.width = '18px';
     
     if (data.isToday) {
       barDiv.style.background = '#2563eb';
@@ -141,13 +153,24 @@ function drawChart() {
     }
     
     barDiv.title = `${data.date}: ${data.count} sessions`;
-    chart.appendChild(barDiv);
+    barContainer.appendChild(barDiv);
+    chart.appendChild(barContainer);
+  });
+  
+  // 라벨도 균등하게 배치
+  weekData.forEach(data => {
+    const labelContainer = document.createElement('div');
+    labelContainer.style.flex = '1';
+    labelContainer.style.textAlign = 'center';
     
     const labelSpan = document.createElement('span');
     labelSpan.textContent = data.date;
     labelSpan.style.fontWeight = data.isToday ? 'bold' : 'normal';
     labelSpan.style.color = data.isToday ? '#2563eb' : '#888';
-    labelsDiv.appendChild(labelSpan);
+    labelSpan.style.fontSize = '0.85rem';
+    
+    labelContainer.appendChild(labelSpan);
+    labelsDiv.appendChild(labelContainer);
   });
 }
 
