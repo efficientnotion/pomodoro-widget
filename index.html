@@ -1,103 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Widget</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: transparent; /* 투명 배경 중요! */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .widget {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 350px;
-        }
-        /* 포모도로 타이머 스타일 */
-        .timer-display {
-            font-size: 48px;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            background: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>포모도로 타이머 위젯</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="widget">
-        <h2 style="text-align: center;">Pomodoro Timer</h2>
-        <div class="timer-display" id="timer">25:00</div>
-        <div class="controls">
-            <button onclick="startTimer()">Start</button>
-            <button onclick="pauseTimer()">Pause</button>
-            <button onclick="resetTimer()">Reset</button>
-        </div>
+  <div class="container">
+    <!-- 타이머 (좌측) -->
+    <div class="timer-box">
+      <div class="circle">
+        <span class="timer">25:00</span>
+        <div class="status">● work</div>
+      </div>
+      <div class="controls">
+        <button id="start">&#9658;</button>
+        <button id="reset">&#8635;</button>
+      </div>
     </div>
-
-    <script>
-        let timeLeft = 25 * 60; // 25분
-        let isRunning = false;
-        let interval;
-
-        function updateDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                interval = setInterval(() => {
-                    if (timeLeft > 0) {
-                        timeLeft--;
-                        updateDisplay();
-                    } else {
-                        pauseTimer();
-                        alert('시간 종료!');
-                    }
-                }, 1000);
-            }
-        }
-
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(interval);
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            timeLeft = 25 * 60;
-            updateDisplay();
-        }
-    </script>
+    <!-- 차트 (우측) -->
+    <div class="chart-box">
+      <div class="chart-header">
+        <button class="nav-btn">&#8592;</button>
+        <span>September 2025</span>
+        <button class="nav-btn">&#8594;</button>
+      </div>
+      <div class="chart">
+        <div class="bar" style="height: 80%"></div>
+        <div class="bar" style="height: 80%"></div>
+        <div class="bar" style="height: 35%"></div>
+        <div class="bar" style="height: 80%"></div>
+        <div class="bar" style="height: 100%"></div>
+        <div class="bar" style="height: 80%"></div>
+        <div class="bar" style="height: 80%"></div>
+      </div>
+      <div class="chart-labels">
+        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
