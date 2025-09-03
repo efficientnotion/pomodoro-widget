@@ -10,9 +10,29 @@
     <!-- 타이머 (좌측) -->
     <div class="timer-box">
       <div class="circle">
-        <span class="timer">25:00</span>
-        <div class="status">● work</div>
-      </div>
+  <svg width="180" height="180">
+    <circle
+      class="bg"
+      cx="90" cy="90" r="80"
+      stroke="#e5e5e5"
+      stroke-width="14"
+      fill="none"
+    />
+    <circle
+      class="progress"
+      cx="90" cy="90" r="80"
+      stroke="#16b8f3"
+      stroke-width="14"
+      fill="none"
+      stroke-linecap="round"
+      stroke-dasharray="502"
+      stroke-dashoffset="0"
+    />
+  </svg>
+  <span class="timer">25:00</span>
+  <div class="status">● work</div>
+</div>
+
       <div class="controls">
         <button id="start">&#9658;</button>
         <button id="reset">&#8635;</button>
